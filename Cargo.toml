@@ -11,3 +11,4 @@ inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", feat
 lang-c = "0.11.0"
 log = "0.4.16"
 structopt = "0.3.26"
+thiserror = "1.0.30"
