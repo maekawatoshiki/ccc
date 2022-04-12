@@ -20,5 +20,5 @@ fn main() {
     let config = Config::default();
     let result = parse(&config, opt.input_file).expect("Error occurred while parsing");
 
-    compile(result).expect("Error occurred while compiling")
+    compile(&result).expect("Error occurred while compiling")
 }
