@@ -1,14 +1,14 @@
 use lang_c::{
-    ast::{ExternalDeclaration, FunctionDefinition},
+    ast::{Declarator, DeclaratorKind, ExternalDeclaration, FunctionDefinition, Identifier},
     driver::Parse,
     span::Node,
 };
 use log;
 use thiserror::Error as ThisError;
 
-pub fn compile(parsed: &Parse) -> Result<(), Error> {
+pub fn compile(parse: &Parse) -> Result<(), Error> {
     let mut ctx = Context::default();
-    compile_translation_unit(&mut ctx, &parsed.unit.0)
+    compile_translation_unit(&mut ctx, &parse.unit.0)
 }
 
 /// A context for whole compilation process.
@@ -22,6 +22,8 @@ fn compile_translation_unit(
     ctx: &mut Context,
     decls: &Vec<Node<ExternalDeclaration>>,
 ) -> Result<(), Error> {
+    log::info!("Node: {:#?}", decls);
+
     for decl in decls {
         match &decl.node {
             ExternalDeclaration::FunctionDefinition(func) => compile_func_decl(ctx, func)?,
@@ -33,7 +35,23 @@ fn compile_translation_unit(
     Ok(())
 }
 
-fn compile_func_decl(_ctx: &mut Context, func: &Node<FunctionDefinition>) -> Result<(), Error> {
-    log::info!("Todo: skipping function");
+fn compile_func_decl(
+    _ctx: &mut Context,
+    Node { node: func, .. }: &Node<FunctionDefinition>,
+) -> Result<(), Error> {
+    let name = expect_ident(&func.declarator.node).unwrap();
+
+    log::info!("Todo: skipping function '{}'", name);
+
     Ok(())
+}
+
+fn expect_ident(declarator: &Declarator) -> Option<&String> {
+    match &declarator.kind.node {
+        DeclaratorKind::Identifier(Node {
+            node: Identifier { name },
+            ..
+        }) => Some(name),
+        _ => None,
+    }
 }
