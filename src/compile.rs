@@ -1,5 +1,5 @@
 use lang_c::driver::Parse;
 
-pub fn compile(parsed: Parse) -> Result<(), ()> {
+pub fn compile(_parsed: Parse) -> Result<(), ()> {
     todo!()
 }
